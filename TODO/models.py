@@ -8,6 +8,10 @@ class Project(models.Model):
     git_link = models.CharField(max_length=64)
 
 
+    def __str__ (self):
+        return self.project_name
+
+
 class Todo(models.Model):
     id = models.UUIDField(default = uuid4, primary_key = True)
     project_name = models.ForeignKey(Project, on_delete=models.CASCADE)
