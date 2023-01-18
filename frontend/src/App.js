@@ -19,7 +19,7 @@ class App extends React.Component {
   componentDidMount() {
     axios.get('http://127.0.0.1:8000/api/authors')
       .then(response => {
-        const authors = response.data
+        const authors = response.data.results
           this.setState(
             {
             'authors': authors
@@ -27,9 +27,9 @@ class App extends React.Component {
           )
       }).catch(error => console.log(error))
 
-    axios.get('http://127.0.0.1:8000/api/Project')
+    axios.get('http://127.0.0.1:8000/api/Project/')
       .then(response => {
-        const projects = response.data
+        const projects = response.data.results
           this.setState(
             {
             'projects': projects
@@ -37,9 +37,9 @@ class App extends React.Component {
           )
       }).catch(error => console.log(error))
 
-    axios.get('http://127.0.0.1:8000/api/Todo')
+    axios.get('http://127.0.0.1:8000/api/Todo/')
       .then(response => {
-        const todoes = response.data
+        const todoes = response.data.results
           this.setState(
             {
             'todoes': todoes
