@@ -31,12 +31,14 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from authors.views import AuthorModelViewSet
-from TODO.views import ProjectModelViewSet, TodoModelViewSet
+from TODO.views import ProjectModelViewSet, TodoModelViewSet, UserModelViewSet
 
 router = DefaultRouter()
 router.register('authors', AuthorModelViewSet)
 router.register('Project', ProjectModelViewSet)
 router.register('Todo', TodoModelViewSet)
+router.register('user', UserModelViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
