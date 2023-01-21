@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AuthorList from './components/Author.js'
+import ProjectDetailList from './components/ProjectDetail.js'
 import ProjectList from './components/Project.js'
 import TodoList from './components/TODO.js'
 import UserList from './components/User.js'
@@ -85,6 +86,7 @@ class App extends React.Component {
               <Route exact path='/' component={() => <UserList users = {this.state.users} />} />
               <Route exact path='/project' component={() => <ProjectList projects = {this.state.projects} />} />
               <Route exact path='/todo' component={() => <TodoList todoes = {this.state.todoes} />} />
+              <Route path="/project/:project_name"> <ProjectDetailList projects={this.state.projects} /> </Route>
               <Route component={NotFound404} />
             </Switch>
           </BrowserRouter>
