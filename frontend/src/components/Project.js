@@ -1,16 +1,12 @@
 import React from 'react'
+import {Link, useParams} from 'react-router-dom'
+
 
 const ProjectItem = ({project}) => {
     return (
         <tr>
             <td>
-            {project.project_name}
-            </td>
-            <td>
-            {project.git_link}
-            </td>
-            <td>
-            {project.users_list}
+            <td><Link to={`project/${project.project_name}`}>{project.project_name}</Link></td>
             </td>
         </tr>
     )
@@ -22,13 +18,7 @@ const ProjectList = ({projects}) => {
             <th>
             Name
             </th>
-            <th>
-            Git
-            </th>
-            <th>
-            Users list
-            </th>
-            {projects.map((project) => <ProjectItem project={project} />)}
+            {projects.map((project) => <ProjectItem project = {project}/>)}
         </table>
     )
 }
