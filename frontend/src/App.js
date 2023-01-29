@@ -6,8 +6,10 @@ import ProjectDetailList from './components/ProjectDetail.js'
 import ProjectList from './components/Project.js'
 import TodoList from './components/TODO.js'
 import UserList from './components/User.js'
+import LoginForm from'./components/Auth.js'
 import axios from 'axios'
 import {HashRouter, Route, Link, Switch, BrowserRouter} from 'react-router-dom'
+import Cookies from 'universal-cookie'
 
 const NotFound404 = ({ location }) => { return( <div> <h1>Страница по адресу '{location.pathname}'не найдена</h1> </div> ) }
 
@@ -17,11 +19,41 @@ class App extends React.Component {
     this.state = {
       'users': [],
       'projects': [],
-      'todoes': []
+      'todoes': [],
+      'token':''
     }
   }
 
-  componentDidMount() {
+  set_token(token) { 
+    const cookies =new Cookies()
+    cookies.set('token', token) 
+    this.setState({'token': token}) 
+  }
+
+  is_authenticated() { 
+    return this.state.token !='' 
+  }
+
+  logout () {
+    this.set_token('')
+  }
+
+  get_token_from_storage() {
+     const cookies =new Cookies() 
+     const token = cookies.get('token') 
+     this.setState({'token': token}) 
+  }
+
+  get_token(username, password) {
+    axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username, password: password})
+    .then(response => {
+      this.set_token(response.data['token'])
+      //console.log(response.data)
+    })
+    .catch(error => alert('Неверный логин или пароль'))
+    }
+
+  load_data() {  
     axios.get('http://127.0.0.1:8000/api/user')
       .then(response => {
         const users = response.data.results
@@ -53,9 +85,16 @@ class App extends React.Component {
       }).catch(error => console.log(error))
   }
 
+  componentDidMount() {
+    this.load_data()
+    this.get_token_from_storage()
+  }
+
+    
+
   render () {
     return (
-      <div class ='App'>
+      <div className='App'>
         {/* <div>
           <UserList users={this.state.users} />
         </div>
@@ -80,6 +119,9 @@ class App extends React.Component {
             <li>
             <Link to='/todo'>Todo</Link>
             </li>
+            <li> 
+              {this.is_authenticated() ? <button onClick={()=>this.logout()}>Logout</button> : <Link to='/login'>Login</Link>} 
+            </li>
             </ul>
           </nav>
             <Switch>
@@ -87,6 +129,7 @@ class App extends React.Component {
               <Route exact path='/project' component={() => <ProjectList projects = {this.state.projects} />} />
               <Route exact path='/todo' component={() => <TodoList todoes = {this.state.todoes} />} />
               <Route path="/project/:project_name"> <ProjectDetailList projects={this.state.projects} /> </Route>
+              <Route exact path='/login'component={()=><LoginForm get_token={(username,password) => this.get_token(username,password)} />} />
               <Route component={NotFound404} />
             </Switch>
           </BrowserRouter>
