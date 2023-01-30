@@ -2,7 +2,7 @@ import json
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate, APIClient, APISimpleTestCase, APITestCase
-# from mixer.backend.django import mixer
+from mixer.backend.django import mixer
 from django.contrib.auth.models import User
 from .views import UserModelViewSet, ProjectModelViewSet
 from .models import User as MyUser, Project, Todo
@@ -50,11 +50,18 @@ class TestProjectViewSet(TestCase):
 
 class TestProjectViewSet(APITestCase):
 
-    def test_create_todo(self):
+    def test_create_project(self):
         admin = User.objects.create_superuser('admin', 'admin@admin.com','admin123456')
         self.client.login(username='admin', password='admin123456')
         response = self.client.post('/api/Project/', {'project_name' : 'Пушкин', 'users_list' :  'Arsenky, Valera', 'git_link' :'git/pull/10'} )
-        self.assertEqual(response.status_code, status.HTTP_201_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_project1(self):
+        admin = User.objects.create_superuser('admin', 'admin@admin.com','admin123456')
+        self.client.login(username='admin', password='admin123456')
+        project = mixer.blend(Project)
+        response = self.client.post('/api/Project/', {'project_name' : project.project_name ,'users_list' :  'Arsenky, Valera', 'git_link' :'git/pull/10'})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class TestTodoViewSet(APITestCase):
 
