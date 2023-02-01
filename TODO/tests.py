@@ -23,6 +23,7 @@ class TestUserViewSet(TestCase):
         response = view(request) 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    # тест не проходит, так как метод create у этой view переопределён
     def test_create_admin(self):
         factory = APIRequestFactory()
         request = factory.post('/api/user/', {'username':'Gun', 'firstname': 'Александр', 'lastname' : 'Пушкин', 'email' : 'pushka@yandex.ru'}, format='json')
