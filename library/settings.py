@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'authors',
     'TODO',
     'corsheaders',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
