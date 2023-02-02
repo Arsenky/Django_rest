@@ -17,5 +17,11 @@ class UserModelSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = User
+        fields = ('id', 'username', 'firstname', 'lastname' , 'email')
+
+class UserModelSerializerWithFlags(HyperlinkedModelSerializer):
+
+    class Meta:
+        model = User
         fields = '__all__'
     

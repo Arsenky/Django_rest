@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .models import Project, Todo, User
-from .serializers import ProjectModelSerializer, TodoModelSerializer, UserModelSerializer
+from .serializers import ProjectModelSerializer, TodoModelSerializer, UserModelSerializer, UserModelSerializerWithFlags
 from rest_framework.pagination import LimitOffsetPagination
 from .filters import ProjectFilter, TodoFilter
 from rest_framework import status
@@ -41,3 +41,8 @@ class UserModelViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         return Response('Вы не можете создавать  пользователей через API')
+
+    def get_serializer_class(self): 
+        if self.request.version =='0.2': 
+            return UserModelSerializerWithFlags 
+        return UserModelSerializer
