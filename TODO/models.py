@@ -9,6 +9,8 @@ class User(models.Model):
     firstname = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
     email = models.EmailField(max_length=32, unique = True)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
     def __str__ (self):
         return self.username
