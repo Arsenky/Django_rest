@@ -19,7 +19,7 @@ class User(models.Model):
 class Project(models.Model):
     id = models.UUIDField(default = uuid4, primary_key = True)
     project_name = models.CharField(max_length=64)
-    users_list = models.CharField(max_length=256)
+    users_list = models.ManyToManyField(User)
     git_link = models.CharField(max_length=64)
 
 
