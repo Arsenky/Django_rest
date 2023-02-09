@@ -2,7 +2,7 @@ import React from 'react'
 import {Link, useParams} from 'react-router-dom'
 
 
-const ProjectItem = ({project}) => {
+const ProjectItem = ({project, deleteProject}) => {
     return (
         <tr>
             <td>
@@ -14,11 +14,14 @@ const ProjectItem = ({project}) => {
             <td>
             {project.users_list}
             </td>
+            <td>
+                <button onClick={()=>deleteProject(project.url.slice(34,-1))} type='button'>Delete</button>
+            </td>
         </tr>
     )
 }
 
-const ProjectDetailList = ({projects}) => {
+const ProjectDetailList = ({projects,deleteProject}) => {
     let { project_name } = useParams();
     let filtered_items = projects.filter((project) => project.project_name == project_name)
     return (
@@ -32,7 +35,7 @@ const ProjectDetailList = ({projects}) => {
             <th>
             Users list
             </th>
-            {filtered_items.map((project) => <ProjectItem project = {project}/>)}
+            {filtered_items.map((project) => <ProjectItem project = {project} deleteProject={deleteProject}/>)}
         </table>
     )
 }

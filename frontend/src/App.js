@@ -7,6 +7,7 @@ import ProjectList from './components/Project.js'
 import TodoList from './components/TODO.js'
 import UserList from './components/User.js'
 import LoginForm from'./components/Auth.js'
+import ProjectForm from'./components/ProjectForm.js'
 import axios from 'axios'
 import {HashRouter, Route, Link, Switch, BrowserRouter} from 'react-router-dom'
 import Cookies from 'universal-cookie'
@@ -63,6 +64,32 @@ class App extends React.Component {
           }
         return headers
       }
+  
+  deleteProject(id) {
+    const headers = this.get_headers()
+    axios.delete(`http://127.0.0.1:8000/api/Project/${id}`, {headers, headers})
+        .then(response => {
+            this.setState({projects: this.state.projects.filter((item)=>item.id !==id)})
+        }).catch(error => console.log(error))
+  }
+
+  
+  createProject(project_name, git_link, users_list) {
+    const headers = this.get_headers()
+    const list = [users_list]
+    const data = {project_name: project_name,  git_link: git_link, users_list: list}
+    axios.post(`http://127.0.0.1:8000/api/Project/`, data, {headers, headers})
+    .then(response => {
+    let new_project = response.data
+    const user_list = this.state.users_list.filter((user) => user.id ===
+    new_project.users_list)[0]
+    new_project.users_list = user_list
+
+    this.setState({projects: [...this.state.projects, new_project]})
+    }).catch(error => console.log(error))
+  }
+    
+        
 
   load_data() { 
     const headers = this.get_headers()
@@ -77,6 +104,8 @@ class App extends React.Component {
           )
       }).catch(error => console.log(error))
 
+  
+
     axios.get('http://127.0.0.1:8000/api/Project/', {headers})
       .then(response => {
         const projects = response.data.results
@@ -85,6 +114,7 @@ class App extends React.Component {
             'projects': projects
             }
           )
+          console.log(this.state)
       }).catch(error => console.log(error))
 
     axios.get('http://127.0.0.1:8000/api/Todo/', {headers})
@@ -96,8 +126,8 @@ class App extends React.Component {
             }
           )
       }).catch(error => console.log(error))
-  }
-
+  }  
+  
   componentDidMount() {
     this.get_token_from_storage()
   }
@@ -140,7 +170,8 @@ class App extends React.Component {
               <Route exact path='/' component={() => <UserList users = {this.state.users} />} />
               <Route exact path='/project' component={() => <ProjectList projects = {this.state.projects} />} />
               <Route exact path='/todo' component={() => <TodoList todoes = {this.state.todoes} />} />
-              <Route path="/project/:project_name"> <ProjectDetailList projects={this.state.projects} /> </Route>
+              <Route exact path='/project/create' component={() => <ProjectForm createProject={(project_name, git_link, users_list) => this.createProject(project_name, git_link, users_list)}/>} />
+              <Route path="/project/:project_name"> <ProjectDetailList projects={this.state.projects} deleteProject={(id)=>this.deleteProject(id)}/> </Route>
               <Route exact path='/login'component={()=><LoginForm get_token={(username,password) => this.get_token(username,password)} />} />
               <Route component={NotFound404} />
             </Switch>
