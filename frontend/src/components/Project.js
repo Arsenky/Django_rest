@@ -14,12 +14,15 @@ const ProjectItem = ({project}) => {
 
 const ProjectList = ({projects}) => {
     return (
+        <div>
         <table>
             <th>
             Name
             </th>
             {projects.map((project) => <ProjectItem project = {project}/>)}
         </table>
+        <Link to='/project/create'>Create</Link>
+        </div>
     )
 }
 

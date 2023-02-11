@@ -21,6 +21,9 @@ const TodoItem = ({todo}) => {
             <td>
             {todo.text}
             </td>
+            <td>
+                <button type='button'>Delete</button>
+            </td>
         </tr>
     )
 }
