@@ -1,0 +1,7 @@
+django
+psycopg2==2.8.6
+graphene_django
+django-filter
+djangorestframework
+django-cors-headers
+drf-yasg
